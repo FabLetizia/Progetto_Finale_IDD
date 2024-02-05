@@ -18,7 +18,7 @@ def import_values_from_folder(folder_path):
     source_dict = {}
 
     # Ottieni la lista dei file nella cartella
-    file_list = [f for f in os.listdir(folder_path) if f.endswith('.csv') or f.endswith('.jsonl')]
+    file_list = [f for f in os.listdir(folder_path) if f.endswith('.csv') or f.endswith('.jsonl') or f.endswith('.xlsx')]
 
     # Itera sui file nella cartella
     for file_name in file_list:
@@ -48,6 +48,13 @@ def import_values_from_folder(folder_path):
                         json_dict = json.loads(json_line)
                         # Estrai i valori e concatena alla lista
                         current_file_values.append(list(json_dict.values()))
+        if file_name.endswith('.xlsx'):
+            # Sostituisci 'path_al_tuo_file.xlsx' con il percorso effettivo del tuo file Excel
+            file_path = './datasets/train_sources/wissel.xlsx'
+ 
+            # Leggi il file Excel
+            current_file_values = pd.read_excel(file_path)
+                  
 
         # Assegna i valori al dizionario con il nome del file come chiave
         source_dict[file_name] = current_file_values
@@ -102,10 +109,16 @@ def prepare_training_set(source_dict, with_no_map):
         columns_to_remove_data4 = ['id', 'rank', 'change_1_day', 'change_1_year']
         data4 = remove_columns(data4, columns_to_remove_data4)
 
-    return (data1, data2, data3, data4)
+    # SOURCE 5
+    data5 = source_dict.get('wissel.xlsx')
+    if (with_no_map is False):
+        columns_to_remove_data5 = ['ID', 'URL', 'Company code', 'Earnings', 'Revenue', 'Shares', 'Employees']
+        data5 = remove_columns(data5, columns_to_remove_data5)
+
+    return (data1, data2, data3, data4, data5)
 
 def train_flexmatcher(dataframes, with_no_map, random_state):
-    schema_list = [dataframes[0], dataframes[1], dataframes[2], dataframes[3]]
+    schema_list = [dataframes[0], dataframes[1], dataframes[2], dataframes[3], dataframes[4]]
 
     if with_no_map is True:
         data1_mapping = {'Industry':'category',
@@ -164,8 +177,13 @@ def train_flexmatcher(dataframes, with_no_map, random_state):
                          'country': 'location',
                          'share_price':'sharePrice',
                          'categories':'category'}
+        
+        data5_mapping = {'Name': 'name',
+                         'Marketcap':'marketCap',
+                         'Share price':'sharePrice'}
+
     
-    mapping_list = [data1_mapping, data2_mapping, data3_mapping, data4_mapping]
+    mapping_list = [data1_mapping, data2_mapping, data3_mapping, data4_mapping, data5_mapping]
 
     fm = FlexMatcher(schema_list, mapping_list, random_state, sample_size=2000)
     start = datetime.now()
@@ -194,7 +212,7 @@ def predict_flexmatcher(schema, fm):
         
 # Sostituisci 'percorso_della_tua_cartella' con il percorso effettivo della tua cartella
 folder_path = './datasets/train_sources/'
-with_no_map = True
+with_no_map = False
 random_state = 24
 
 # Caricamento dei Dataset
