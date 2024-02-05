@@ -13,53 +13,57 @@ warnings.filterwarnings("ignore")   # LogisticRegression non converge, eliminati
 ### SUPPORT FUNCTIONS ###
 ### ################# ###
 
+# Funzione per la lettura di file csv
+def read_csv(file_path):
+    with open(file_path, 'r', newline='', encoding='utf-8', errors='ignore') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        return [row for row in csv_reader]
+
+#Funzione per la lettura di file jsonl
+def read_jsonl(file_path):
+    with open(file_path, 'r', encoding='utf-8', errors='ignore') as jsonl_file:
+        json_lines = jsonl_file.readlines()
+        if json_lines:
+            first_json_dict = json.loads(json_lines[0])
+            result = [list(first_json_dict.keys())]
+
+            for json_line in json_lines:
+                json_dict = json.loads(json_line)
+                result.append(list(json_dict.values()))
+
+            return result
+        else:
+            return []
+
+#Funzione per la lettura di excel
+def read_excel(file_path):
+    return pd.read_excel(file_path)
+
+#Funzione che estrae le informazioni presenti una directory
 def import_values_from_folder(folder_path):
-    # Inizializza un dizionario vuoto per contenere i valori
     source_dict = {}
+    file_extensions = ['.csv', '.jsonl', '.xlsx']
 
-    # Ottieni la lista dei file nella cartella
-    file_list = [f for f in os.listdir(folder_path) if f.endswith('.csv') or f.endswith('.jsonl') or f.endswith('.xlsx')]
-
-    # Itera sui file nella cartella
-    for file_name in file_list:
-        file_path = os.path.join(folder_path, file_name)
-
-        # Inizializza una lista vuota per i valori del file corrente
-        current_file_values = []
-
-        # Apri il file CSV e leggi i valori
-        if file_name.endswith('.csv'):
-            with open(file_path, 'r', newline='', encoding='utf-8', errors='ignore') as csv_file:
-                csv_reader = csv.reader(csv_file)
-                for row in csv_reader:
-                    current_file_values.append(row)
-        if file_name.endswith('.jsonl'):
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as jsonl_file:
-                json_lines = jsonl_file.readlines()
-                # Se ci sono righe nel file JSONL
-                if json_lines:
-                    # Estrai le chiavi dalla prima riga
-                    first_json_dict = json.loads(json_lines[0])
-                    current_file_values.append(list(first_json_dict.keys()))
-
-                    # Itera su ogni riga successiva del file JSONL
-                    for json_line in json_lines:
-                        #non skippiamo la prima riga perché con get perderemmo i nomi degli attributi
-                        json_dict = json.loads(json_line)
-                        # Estrai i valori e concatena alla lista
-                        current_file_values.append(list(json_dict.values()))
-        if file_name.endswith('.xlsx'):
-            # Sostituisci 'path_al_tuo_file.xlsx' con il percorso effettivo del tuo file Excel
-            file_path = './datasets/train_sources/wissel.xlsx'
- 
-            # Leggi il file Excel
-            current_file_values = pd.read_excel(file_path)
-                  
-
-        # Assegna i valori al dizionario con il nome del file come chiave
-        source_dict[file_name] = current_file_values
+    for file_name in os.listdir(folder_path):
+        if any(file_name.endswith(ext) for ext in file_extensions):
+            file_path = os.path.join(folder_path, file_name)
+            current_file_values = read_file(file_path)
+            source_dict[file_name] = current_file_values
 
     return source_dict
+
+#Funzione per la lettura di file
+def read_file(file_path):
+    if file_path.endswith('.csv'):
+        return read_csv(file_path)
+    elif file_path.endswith('.jsonl'):
+        return read_jsonl(file_path)
+    elif file_path.endswith('.xlsx'):
+        return read_excel(file_path)
+    else:
+        # Gestisci altri tipi di file se necessario
+        print(f"Tipo di file non supportato: {file_path}")
+        return None
 
 def remove_columns(data, columns_to_remove):
     """
