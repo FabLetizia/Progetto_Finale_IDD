@@ -1,6 +1,7 @@
 import os
 import csv
 import json
+import pickle
 import pandas as pd
 import numpy as np
 from flexmatcher import FlexMatcher
@@ -121,7 +122,7 @@ def prepare_training_set(source_dict, with_no_map):
 
     return (data1, data2, data3, data4, data5)
 
-def train_flexmatcher(dataframes, with_no_map, random_state):
+def train_flexmatcher(dataframes, with_no_map, random_state, save=False):
     schema_list = [dataframes[0], dataframes[1], dataframes[2], dataframes[3], dataframes[4]]
 
     if with_no_map is True:
@@ -157,6 +158,17 @@ def train_flexmatcher(dataframes, with_no_map, random_state):
                          'change_1_day': '<NO_MAP>',
                          'change_1_year': '<NO_MAP>',
                          'categories':'category'}
+        
+        data5_mapping = {'URL': '<NO_MAP>',
+                         'ID': '<NO_MAP>',
+                         'Name': 'name',
+                         'Company code': '<NO_MAP>',
+                         'Marketcap':'marketCap',
+                         'Share price':'sharePrice',
+                         'Earnings': '<NO_MAP>',
+                         'Revenue': '<NO_MAP>',
+                         'Shared': '<NO_MAP>',
+                         'Employees': '<NO_MAP>'}
     
     else:
         data1_mapping = {'Founded':'foundationYear',
@@ -195,6 +207,22 @@ def train_flexmatcher(dataframes, with_no_map, random_state):
     end = datetime.now()
     print("Required time: " + str(end-start))
 
+    if save is True:
+        model_filepath = "./src/"
+        model_filename = "flexmatcher_5_sources.pkl"
+        with open(model_filepath+model_filename, 'wb') as f:
+            pickle.dump(fm, f)
+
+    return fm
+
+def load_trained_flexmatcher():
+    model_filepath = "./src/"
+    model_filename = "flexmatcher_2000.pkl"
+    fm = None
+    with open(model_filepath+model_filename, 'rb') as f:
+        fm = pickle.load(f)
+        print("Pre-trained FlaxMatcher loaded!")
+    
     return fm
 
 def predict_flexmatcher(schema, fm):
@@ -214,7 +242,7 @@ def predict_flexmatcher(schema, fm):
 ### MAIN ###
 ### #### ###
         
-# Sostituisci 'percorso_della_tua_cartella' con il percorso effettivo della tua cartella
+''' Riaddestrare il Modello da capo ed eseguire la predizione'''
 folder_path = './datasets/train_sources/'
 with_no_map = False
 random_state = 24
@@ -228,7 +256,11 @@ dataframes = prepare_training_set(source_dict, with_no_map)
 # Addestramento del Modello
 fm = train_flexmatcher(dataframes, with_no_map, random_state)
 
-# Testing del Modello
+
+''' Caricare il Modello pre-addestrato ed eseguire la predizione'''
+fm = load_trained_flexmatcher()
+
+# Testing
 test_source = "./datasets/test_sources/silvestri-ft.com.csv"
 to_predict = None
 if (test_source.endswith('.csv')):
