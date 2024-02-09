@@ -20,6 +20,11 @@ def read_csv(file_path):
         csv_reader = csv.reader(csv_file)
         return [row for row in csv_reader]
 
+# Funzione per la lettura di file JSON
+def read_json(file_path):
+    with open(file_path, 'r', encoding='utf-8', errors='ignore') as json_file:
+        return json.load(json_file)
+
 #Funzione per la lettura di file jsonl
 def read_jsonl(file_path):
     with open(file_path, 'r', encoding='utf-8', errors='ignore') as jsonl_file:
@@ -43,7 +48,7 @@ def read_excel(file_path):
 #Funzione che estrae le informazioni presenti una directory
 def import_values_from_folder(folder_path):
     source_dict = {}
-    file_extensions = ['.csv', '.jsonl', '.xlsx']
+    file_extensions = ['.csv','.json','.jsonl', '.xlsx']
 
     for file_name in os.listdir(folder_path):
         if any(file_name.endswith(ext) for ext in file_extensions):
@@ -57,6 +62,8 @@ def import_values_from_folder(folder_path):
 def read_file(file_path):
     if file_path.endswith('.csv'):
         return read_csv(file_path)
+    elif file_path.endswith('.json'):
+        return read_json(file_path)
     elif file_path.endswith('.jsonl'):
         return read_jsonl(file_path)
     elif file_path.endswith('.xlsx'):
@@ -238,6 +245,8 @@ def predict_flexmatcher(schema, fm):
     
     return fm.make_prediction(schema)
 
+
+
 ### #### ###
 ### MAIN ###
 ### #### ###
@@ -254,17 +263,33 @@ source_dict = import_values_from_folder(folder_path)
 dataframes = prepare_training_set(source_dict, with_no_map)
 
 # Addestramento del Modello
-fm = train_flexmatcher(dataframes, with_no_map, random_state)
+#fm = train_flexmatcher(dataframes, with_no_map, random_state)
 
 
 ''' Caricare il Modello pre-addestrato ed eseguire la predizione'''
 fm = load_trained_flexmatcher()
 
 # Testing
-test_source = "./datasets/test_sources/silvestri-ft.com.csv"
+test_source = "./datasets/test_sources/alessandro/"
 to_predict = None
-if (test_source.endswith('.csv')):
-    to_predict = pd.read_csv(test_source)
+for filename in os.listdir(test_source):
+    if (filename.endswith('.csv')):
+        file_path = os.path.join(test_source, filename)
+        to_predict = pd.read_csv(file_path)
+        print(to_predict)
+    if (filename.endswith(".json")):
+        file_path = os.path.join(test_source, filename)
+        to_predict = pd.read_json(file_path)
+        
+    '''
+    if (filename.endswith(".jsonl")):
+        file_path = os.path.join(test_source, filename)
+        to_predict = read_jsonl(file_path)
+        df = pd.DataFrame(to_predict)
+        to_predict = df
+    if (filename.endswith(".xlsx")):
+        to_predict = read_excel(test_source)
+    '''
 
-predict_mapping = predict_flexmatcher(to_predict, fm)
-print(predict_mapping)
+    predict_mapping = predict_flexmatcher(to_predict, fm)
+    print(predict_mapping)
