@@ -193,3 +193,4 @@ pyrightconfig.json
 
 # Non è possibile pushare i file pickle, vanno compressi per risparmiare spazio
 /src/*.pkl
+.DS_Store
