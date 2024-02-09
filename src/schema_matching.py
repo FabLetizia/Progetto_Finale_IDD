@@ -279,8 +279,8 @@ for filename in os.listdir(test_source):
         print(to_predict)
     if (filename.endswith(".json")):
         file_path = os.path.join(test_source, filename)
-        
         to_predict = pd.read_json(file_path)
+        
     '''
     if (filename.endswith(".jsonl")):
         file_path = os.path.join(test_source, filename)
