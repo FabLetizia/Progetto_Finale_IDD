@@ -54,15 +54,13 @@ def preprocess_sources():
         df = pd.read_csv(file)
         columns = list(df.columns)
         for c in columns:
-            col = df[c].to_list()
+            series = df[c]
+            col = series.to_list()
             first = str(col[0])
             if "[" in first and "]" in first:
                 new_col = string_list_to_string(col)
-            else:
-                new_col = column_values_to_string(col)
-            
-            df[c] = new_col
-
+                df[c] = new_col
+          
         print("Preprocessing of '" + file + "' completed!")
         df.to_csv(file, index=False)
     
@@ -73,4 +71,3 @@ def preprocess_sources():
 ### MAIN ###
 ### **** ###
 preprocess_sources()
-
