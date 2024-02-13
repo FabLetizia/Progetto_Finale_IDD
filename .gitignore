@@ -194,3 +194,12 @@ pyrightconfig.json
 # Non è possibile pushare i file pickle, vanno compressi per risparmiare spazio
 /src/*.pkl
 .DS_Store
+
+# Non è possibile committare i file .csv creati per le sorgenti
+/datasets/train_sources/*.csv
+/datasets/test_sources/Addi/*.csv
+/datasets/test_sources/Alessandro/*.csv
+/datasets/test_sources/Fabio/*.csv
+/datasets/test_sources/Riccardo/*.csv
+
+
