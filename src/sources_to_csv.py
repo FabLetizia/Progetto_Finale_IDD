@@ -96,7 +96,7 @@ def test_sources_to_csv():
         str(fabio_sources_folder + "silvestri-valueToday.csv"),
         str(riccardo_sources_folder + "avengers-hitHorizons.jsonl"),
         str(riccardo_sources_folder + "gren-companiesMarketCap.json"),
-        str(riccardo_sources_folder + "MalPatSaj-disfold.xlsx"),
+        str(riccardo_sources_folder + "slytherin-disfold.json"),
         str(riccardo_sources_folder + "silvestri-ft.csv")
     ]
 
