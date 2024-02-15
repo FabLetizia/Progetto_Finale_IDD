@@ -13,6 +13,5 @@ public class Main {
 		for (Map.Entry<Integer, Integer> entry : results.entrySet()) {
             System.out.println("Record: " + entry.getKey() + ", Cluster: " + entry.getValue());
         }
-		
 	}
 }

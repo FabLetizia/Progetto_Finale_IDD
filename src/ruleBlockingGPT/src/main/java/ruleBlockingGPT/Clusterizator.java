@@ -103,10 +103,10 @@ public class Clusterizator {
 				}
 			}
 			
-			if (i % 10000 == 0)
+			if (i % 100 == 0)
 				System.out.println("Fine del Processamento del Record " + i);
 		}
-		String filePath = "";
+		String filePath = "./prova_clusters.txt";
 		this.writeMapToTxt(record2cluster, filePath);
 		return this.record2cluster;
 	}
@@ -114,52 +114,52 @@ public class Clusterizator {
 	/* SECONDO ALGORITMO PER I CONFRONTI */
 	// Sostanzialmente identico al precedente...ma con la differenza che il "record_i" non viene skippato se è già Clusterizzato (ovvero, se ha value != 0).
 	
-	public Map<Integer, Integer> getClusters() {
-		int label = 0;
-		
-		// Inizializzazione dei Cluster: all'inizio, ogni record è "non-Clusterizzato" (value=0)
-		for (int i=0; i<this.matrix.length; i++) {
-			this.record2cluster.put(i, label);
-		}
-
-		// Si itera su tutti i Record
-		for (int i=0; i<this.matrix.length-1; i++) {
-			if (this.record2cluster.get(i) == 0) {
-				// Se il "record_i" corrente è "non-Clusterizzato", abbiamo identificato un nuovo Cluster (label++)
-				label++;
-				this.record2cluster.put(i, label);
-			}
-				// Viene comunque utilizzato per fare i confronti!
-				// Supponiamo: 
-					// - "matrix[0]" simile a "matrix[1]"
-					// - "matrix[0]" non-simile a "matrix[2]"
-					// - "matrix[1]" simile a "matrix[2]".
-				// Con questa versione dell'Algoritmo, "matrix[0,1,2]" staranno nello stesso Cluster! Abbiamo quindi meno Cluster e di dimensione mediamente maggiore
-				// ...e facciamo più confronti!
-			
-				String[] record_i = this.matrix[i];
-				int label_i = this.record2cluster.get(i);
-				
-				for (int j=i+1; j<this.matrix.length; j++) {
-					if (this.record2cluster.get(j) == 0) {
-						String[] record_j = this.matrix[j];
-
-						boolean condition_name = this.editDistance(record_i[0], record_j[0]) <= 5;
-						boolean condition_location = (record_i[1].contains(record_j[1])) || (record_j[1].contains(record_i[1]));
-						boolean condition_category = (record_i[4].contains(record_j[4])) || (record_j[4].contains(record_i[4]));
-						boolean final_condition = condition_name && (condition_location || condition_category);
-						if (final_condition == true) {
-							this.record2cluster.put(j, label_i);
-						}
-					}
-				}
-				
-			if (i % 10000 == 0)
-				System.out.println("Fine del Processamento del Record " + i);
-		}
-		
-		return this.record2cluster;
-	}
+//	public Map<Integer, Integer> getClusters() {
+//		int label = 0;
+//		
+//		// Inizializzazione dei Cluster: all'inizio, ogni record è "non-Clusterizzato" (value=0)
+//		for (int i=0; i<this.matrix.length; i++) {
+//			this.record2cluster.put(i, label);
+//		}
+//
+//		// Si itera su tutti i Record
+//		for (int i=0; i<this.matrix.length-1; i++) {
+//			if (this.record2cluster.get(i) == 0) {
+//				// Se il "record_i" corrente è "non-Clusterizzato", abbiamo identificato un nuovo Cluster (label++)
+//				label++;
+//				this.record2cluster.put(i, label);
+//			}
+//				// Viene comunque utilizzato per fare i confronti!
+//				// Supponiamo: 
+//					// - "matrix[0]" simile a "matrix[1]"
+//					// - "matrix[0]" non-simile a "matrix[2]"
+//					// - "matrix[1]" simile a "matrix[2]".
+//				// Con questa versione dell'Algoritmo, "matrix[0,1,2]" staranno nello stesso Cluster! Abbiamo quindi meno Cluster e di dimensione mediamente maggiore
+//				// ...e facciamo più confronti!
+//			
+//				String[] record_i = this.matrix[i];
+//				int label_i = this.record2cluster.get(i);
+//				
+//				for (int j=i+1; j<this.matrix.length; j++) {
+//					if (this.record2cluster.get(j) == 0) {
+//						String[] record_j = this.matrix[j];
+//
+//						boolean condition_name = this.editDistance(record_i[0], record_j[0]) <= 5;
+//						boolean condition_location = (record_i[1].contains(record_j[1])) || (record_j[1].contains(record_i[1]));
+//						boolean condition_category = (record_i[4].contains(record_j[4])) || (record_j[4].contains(record_i[4]));
+//						boolean final_condition = condition_name && (condition_location || condition_category);
+//						if (final_condition == true) {
+//							this.record2cluster.put(j, label_i);
+//						}
+//					}
+//				}
+//				
+//			if (i % 100 == 0)
+//				System.out.println("Fine del Processamento del Record " + i);
+//		}
+//		
+//		return this.record2cluster;
+//	}
 
 	// Funzione per il Calcolo della Distanza di Levenshtein (o Edit Distance) tra due Stringhe
 	private int editDistance(String str1, String str2) {

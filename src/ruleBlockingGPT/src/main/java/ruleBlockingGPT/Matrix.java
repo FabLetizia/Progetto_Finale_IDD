@@ -14,12 +14,12 @@ public class Matrix {
 	private String filePath;
 
 	public Matrix() throws FileNotFoundException, IOException {
-		this.filePath = "./../MediateSchemaSemicolon.csv";
+//		this.filePath = "./MediatedSchema_20000.csv"; Prendi il file da qui
 		this.matrix = this.buildMatrix();
 	}
 
 	private String[][] buildMatrix() throws FileNotFoundException, IOException {
-		String[][] matrix = new String[81706][6];
+//		String[][] matrix = new String[81706][6]; Setta il numero di righe opportunamente
 
 		try (FileReader fileReader = new FileReader(this.filePath);
 				CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader())) {
