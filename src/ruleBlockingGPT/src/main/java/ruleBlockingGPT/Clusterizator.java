@@ -1,6 +1,11 @@
 package ruleBlockingGPT;
 
 import java.util.HashMap;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 public class Clusterizator {
@@ -152,7 +157,8 @@ public class Clusterizator {
 			if (i % 10000 == 0)
 				System.out.println("Fine del Processamento del Record " + i);
 		}
-
+		String filePath = "";
+		this.writeMapToExcel(record2cluster, filePath);
 		return this.record2cluster;
 	}
 
@@ -180,4 +186,30 @@ public class Clusterizator {
 
 		return dp[str1.length()][str2.length()];
 	}
+	
+	public void writeMapToExcel(Map<Integer, Integer> map, String filePath) {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Map Data");
+
+            int rowNumber = 0;
+
+            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+                Row row = sheet.createRow(rowNumber++);
+                Cell keyCell = row.createCell(0);
+                keyCell.setCellValue(entry.getKey());
+
+                Cell valueCell = row.createCell(1);
+                valueCell.setCellValue(entry.getValue());
+            }
+
+            try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
+                workbook.write(outputStream);
+            }
+
+            System.out.println("Excel file written successfully.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
