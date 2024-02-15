@@ -49,11 +49,47 @@ public class Clusterizator {
 					// ...ma trascurando quelli già Clusterizzati!
 					if (this.record2cluster.get(j) == 0) {
 						String[] record_j = this.matrix[j];
+						
+						String name1 = record_i[0].toLowerCase();
+						String name2 = record_j[0].toLowerCase();
+						int average_len = (name1.length() + name2.length())/2;
+						
+						String location1 = record_i[1].toLowerCase().replaceAll(",","");
+						String location2 = record_j[1].toLowerCase().replaceAll(",","");
+						int location_len = (location1.length() + location2.length())/2;
 
-						boolean condition_name = this.editDistance(record_i[0], record_j[0]) <= 5;
-						boolean condition_location = (record_i[1].contains(record_j[1])) || (record_j[1].contains(record_i[1]));
-						boolean condition_category = (record_i[4].contains(record_j[4])) || (record_j[4].contains(record_i[4]));
-						boolean final_condition = condition_name && (condition_location || condition_category);
+						
+						String category1 = record_i[4].toLowerCase().replaceAll(",","");
+						String category2 = record_j[4].toLowerCase().replaceAll(",","");
+						int category_len = (category1.length() + category2.length())/2;
+
+						
+						String year1 = record_i[5].toLowerCase();
+						String year2 = record_j[5].toLowerCase();
+						
+						boolean final_condition = false;
+
+
+						//0 --> name, 1 --> location, 2 --> marketcap, 3 --> sharedPrice, 4 --> category, 5 --> FoundationYear
+						if(!(year1.isEmpty()) && !(year2.isEmpty())) {
+							
+							boolean condition_name = this.editDistance(name1, name2) <= average_len/2;
+							boolean condition_year = this.editDistance(year1, year2) <= 2;
+							final_condition = condition_name && condition_year;
+						}
+						else {
+							boolean condition_name = this.editDistance(name1, name2) <= average_len/2;
+							boolean condition_location = (location1.contains(location2)) || (location2.contains(location1) 
+									|| this.editDistance(location1, location2) <= location_len/2);
+     						boolean condition_category = (category1.contains(category2)) || (category2.contains(category1) 
+									|| this.editDistance(category1, category2) <= category_len/2);
+							final_condition = condition_name && (condition_category || condition_location);
+
+						}
+						
+//						boolean condition_name = this.editDistance(record_i[0], record_j[0]) <= 5;
+//						boolean condition_location = (record_i[1].contains(record_j[1])) || (record_j[1].contains(record_i[1]));
+//						boolean condition_category = (record_i[4].contains(record_j[4])) || (record_j[4].contains(record_i[4]));
 						
 						if (final_condition == true) {
 							// Se la final_condition è verificata, "record_i" e "record_j" devono stare nello stesso Cluster!
