@@ -204,7 +204,7 @@ pyrightconfig.json
 /datasets/test_sources/Fabio/*.csv
 /datasets/fabio_sources.csv
 /datasets/test_sources/Riccardo/*.csv
-/datasets/riccardo_sources.csv
+/datasets/ric_sources.csv
 /datasets/train_sources.csv
 
 
