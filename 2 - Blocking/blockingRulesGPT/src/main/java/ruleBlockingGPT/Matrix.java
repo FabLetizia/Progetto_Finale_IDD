@@ -14,7 +14,7 @@ public class Matrix {
 	private String filePath;
 
 	public Matrix() throws FileNotFoundException, IOException {
-		this.filePath = "./MediatedSchemaSemicolon_24.csv"; // Prendi il file da qui
+		this.filePath = "./../../datasets/MediatedSchemaSemicolon_24.csv"; // Prendi il file da qui
 		this.matrix = this.buildMatrix();
 	}
 
