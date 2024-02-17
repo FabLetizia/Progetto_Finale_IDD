@@ -91,10 +91,6 @@ public class Clusterizator {
 
 						}
 
-						//						boolean condition_name = this.editDistance(record_i[0], record_j[0]) <= 5;
-						//						boolean condition_location = (record_i[1].contains(record_j[1])) || (record_j[1].contains(record_i[1]));
-						//						boolean condition_category = (record_i[4].contains(record_j[4])) || (record_j[4].contains(record_i[4]));
-
 						if (final_condition == true) {
 							// Se la final_condition è verificata, "record_i" e "record_j" devono stare nello stesso Cluster!
 							this.record2cluster.put(j, label_i);
@@ -118,12 +114,15 @@ public class Clusterizator {
 		int label = 0;
 
 		// Inizializzazione dei Cluster: all'inizio, ogni record è "non-Clusterizzato" (value=0)
-		for (int i=0; i<this.matrix.length; i++) {
+		for (int i=0; i<this.matrix.length; i++)
 			this.record2cluster.put(i, label);
-		}
-
+		
+		System.out.println("Inizio della Costruzione dei Cluster.");
+		long startTime = System.nanoTime();
+		
 		// Si itera su tutti i Record
 		for (int i=0; i<this.matrix.length-1; i++) {
+
 			if (this.record2cluster.get(i) == 0) {
 				// Se il "record_i" corrente è "non-Clusterizzato", abbiamo identificato un nuovo Cluster (label++)
 				label++;
@@ -187,10 +186,23 @@ public class Clusterizator {
 				}
 			}
 
-			if (i % 10000 == 0)
+			if (i % 10000 == 0 && i != 0)
 				System.out.println("Fine del Processamento del Record " + i);
 		}
-		String filePath = "./prova_clusters_full.txt";
+		
+		System.out.println("Fine del processo di Clustering");
+		long endTime = System.nanoTime();
+		long duration = endTime - startTime;
+		
+		double seconds = (double) duration / 1_000_000_000.0;
+		
+		int hours = (int) (seconds / 3600);
+		int minutes = (int) ((seconds % 3600) / 60);
+		int remainingSeconds = (int) (seconds % 60);
+		
+		System.out.println("Tempo trascorso: " + hours + " ore, " + minutes + " minuti, " + remainingSeconds + " secondi");
+		
+		String filePath = "./clustering_full_24.txt";
 		this.writeMapToTxt(record2cluster, filePath);
 		return this.record2cluster;
 	}
@@ -227,7 +239,7 @@ public class Clusterizator {
 				writer.newLine();
 			}
 
-			System.out.println("Text file written successfully.");
+			System.out.println("Report del Clustering materializzato con successo.");
 
 		} catch (IOException e) {
 			e.printStackTrace();
