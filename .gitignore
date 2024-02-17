@@ -196,16 +196,16 @@ pyrightconfig.json
 .DS_Store
 
 # Non è possibile committare i file .csv creati per le sorgenti
-/datasets/train_sources/*.csv
-/datasets/test_sources/Addi/*.csv
-/datasets/addi_sources.csv
-/datasets/test_sources/Alessandro/*.csv
-/datasets/alessandro_sources.csv
-/datasets/test_sources/Fabio/*.csv
-/datasets/fabio_sources.csv
-/datasets/test_sources/Riccardo/*.csv
-/datasets/ric_sources.csv
-/datasets/train_sources.csv
+datasets/train_sources/*.csv
+datasets/test_sources/Addi/*.csv
+datasets/addi_sources.csv
+datasets/test_sources/Alessandro/*.csv
+datasets/alessandro_sources.csv
+datasets/test_sources/Fabio/*.csv
+datasets/fabio_sources.csv
+datasets/test_sources/Riccardo/*.csv
+datasets/ric_sources.csv
+datasets/train_sources.csv
 
 
 ### Eclipse ###
