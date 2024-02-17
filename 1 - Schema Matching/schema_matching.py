@@ -93,7 +93,7 @@ def train_flexmatcher(dataframes, random_state, save=False):
     print("Required time: " + str(end-start))
 
     if save is True:
-        model_filepath = "./src/"
+        model_filepath = "./1 - Schema Matching/"
         model_filename = "flexmatcher_pt.pkl"
         with open(model_filepath+model_filename, 'wb') as f:
             pickle.dump(fm, f)
@@ -101,7 +101,7 @@ def train_flexmatcher(dataframes, random_state, save=False):
     return fm
 
 def load_trained_flexmatcher():
-    model_filepath = "./src/"
+    model_filepath = "./1 - Schema Matching/"
     model_filename = "flexmatcher_pt.pkl"
     fm = None
     with open(model_filepath+model_filename, 'rb') as f:
