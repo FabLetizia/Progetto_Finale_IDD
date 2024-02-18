@@ -80,4 +80,4 @@ else:
 model.to(device)
 
 vectors_df = vectorize_records(records)
-vectors_df.to_csv("./datasets/fileprova.csv", index=False)
+vectors_df.to_csv("./datasets/MediatedSchemaVectors.csv", index=False)
