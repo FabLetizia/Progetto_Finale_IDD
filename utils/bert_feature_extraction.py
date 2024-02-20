@@ -37,12 +37,13 @@ def vectorize_records(records):
     for i in range(0, len(records)):
         series = records.iloc[i].dropna()
         string_list = series.tolist()
+        string_list_lower = [x.lower() for x in string_list]
 
         vector = np.zeros((768,))
         vector = vector.reshape(-1, 768)
 
         if string_list != []:
-            extraction = extract_features(string_list)
+            extraction = extract_features(string_list_lower)
 
             for j in range(0, len(extraction)):
                 v = extraction.iloc[j].to_numpy()
