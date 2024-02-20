@@ -51,7 +51,7 @@ def create_frequency2dimension(d2b_filepath):
 ### MAIN ###
 ### #### ###
 
-report_filepath = "./2 - Blocking/blockingW2V/stats/SchemaMediatoConCluster.csv"
+report_filepath = "./datasets/MediatedSchemaConBlocks_W2V.csv"
 d2b_filepath = "./2 - Blocking/blockingW2V/dimension2block_W2V.csv"
 
 create_dimension2block(report_filepath)
