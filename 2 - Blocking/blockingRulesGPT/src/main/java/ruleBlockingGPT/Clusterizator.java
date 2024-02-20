@@ -79,17 +79,17 @@ public class Clusterizator {
 					//0 --> name, 1 --> location, 2 --> marketcap, 3 --> sharedPrice, 4 --> category, 5 --> FoundationYear
 					if(!(year1.isEmpty()) && !(year2.isEmpty())) {
 
-						boolean condition_name = this.editDistance(name1, name2) <= average_len/2;
+						boolean condition_name = this.editDistance(name1, name2) <= 2*average_len/3;
 						boolean condition_year = this.editDistance(year1, year2) <= 2;
 						final_condition = condition_name && condition_year;
 					}
 					
 					else {
-						boolean condition_name = this.editDistance(name1, name2) <= average_len/2;
+						boolean condition_name = this.editDistance(name1, name2) <= 2*average_len/3;
 						boolean condition_location = (location1.contains(location2)) || (location2.contains(location1) 
-								|| this.editDistance(location1, location2) <= location_len/2);
+								|| this.editDistance(location1, location2) <= 2*location_len/3);
 						boolean condition_category = (category1.contains(category2)) || (category2.contains(category1) 
-								|| this.editDistance(category1, category2) <= category_len/2);
+								|| this.editDistance(category1, category2) <= 2*category_len/3);
 						final_condition = condition_name && (condition_category || condition_location);
 					}
 					
