@@ -1,4 +1,4 @@
-# Progetto_Finale_IDD
+# HOMEWORK 6 INGEGNERIA DEI DATI
 Progetto di Data Integration per l'integrazione di 20 sorgenti contenenti dati di compagnie.
 Gli step del progetto possono essere riassunti in 2 passi:
 1. SCHEMA MATCHING: la definizione dello schema mediato prevede di indentificare gli attributi di interesse delle diverse sorgenti e definire uno schema che includa le diverse informazioni significative per un certo dominio. Per questos step piuttosto che procedere con un approccio manuale si è pensato di utilizzare la libreria FlexMatcher come indicatore dei mapping degli attributi delle sorgenti nello schema mediato.
